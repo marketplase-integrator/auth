@@ -10,17 +10,17 @@ class User(BaseModel):
     email: EmailStr
     password: str
 
-    @field_validator("password")
+    @field_validator('password')
     @classmethod
-    def validate_password(cls, value):
+    def validate_password(cls, value: str) -> str:
         if len(value) < 8:
-            raise ValueError("в пароле должно быть минимум 8 символов")
+            raise ValueError("Пароль должен содержать минимум 8 символов")
         if not any(c.isupper() for c in value):
-            raise ValueError("в пароле должна быть заглавная буква")
-        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", value):
-            raise ValueError("Пароль должен иметь хотя бы один спец.символ")
-        if not(c.isdigit() for c in value):
-            raise ValueError("Пароль должен иметь хотя бы одну цифру")
+            raise ValueError("Пароль должен содержать хотя бы одну заглавную букву")
+        if not any(c.isdigit() for c in value):
+            raise ValueError("Пароль должен содержать хотя бы одну цифру")
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
+            raise ValueError("Пароль должен содержать хотя бы один специальный символ")
         return value
 
 try:
