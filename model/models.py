@@ -1,16 +1,17 @@
 import re
 from typing import Any, Self
 
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, EmailStr, Field, validator, field_validator
 
 
 
 class User(BaseModel):
-    name: str = Field(min_lengt=3, max_length=15)
+    name: str = Field(min_length=3, max_length=15)
     email: EmailStr
     password: str
 
-    @validator("password")
+    @field_validator("password")
+    @classmethod
     def validate_password(cls, value):
         if len(value) < 8:
             raise ValueError("в пароле должно быть минимум 8 символов")
